@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard de Ventas</title>
+  <meta name="description" content="Prototipo inicial del dashboard de ventas" />
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <header class="wrap header">
+    <h1>Dashboard de Ventas</h1>
+    <p class="subtitle">Prototipo inicial</p>
+  </header>
+
+  <main class="wrap main">
+    <!-- Controles (maqueta). Se conectarán más adelante. -->
+    <section class="card controls">
+      <h2 class="section-title">Controles</h2>
+      <div class="controls__row">
+        <button id="btnLoadDefault" class="btn" disabled>
+          Cargar CSV por defecto
+        </button>
+        <label class="file">
+          <input id="fileInput" type="file" accept=".csv" disabled />
+          <span>Subir CSV…</span>
+        </label>
+      </div>
+      <p class="hint">Controles deshabilitados en este prototipo.</p>
+    </section>
+
+    <!-- KPIs -->
+    <section class="kpi-grid">
+      <article class="kpi">
+        <h3>Ingresos</h3>
+        <div id="kpiRevenue" class="kpi__value">—</div>
+        <small class="kpi__note">sin datos</small>
+      </article>
+      <article class="kpi">
+        <h3>Unidades</h3>
+        <div id="kpiUnits" class="kpi__value">—</div>
+        <small class="kpi__note">sin datos</small>
+      </article>
+      <article class="kpi">
+        <h3>Transacciones</h3>
+        <div id="kpiTx" class="kpi__value">—</div>
+        <small class="kpi__note">sin datos</small>
+      </article>
+      <article class="kpi">
+        <h3>Ticket Promedio</h3>
+        <div id="kpiATV" class="kpi__value">—</div>
+        <small class="kpi__note">sin datos</small>
+      </article>
+    </section>
+
+    <!-- “slots” para gráficos -->
+    <section class="grid-2">
+      <article class="card chart">
+        <h2 class="section-title">Productos más vendidos</h2>
+        <div class="placeholder">Gráfico aquí</div>
+      </article>
+      <article class="card chart">
+        <h2 class="section-title">Ingresos por producto</h2>
+        <div class="placeholder">Gráfico aquí</div>
+      </article>
+      <article class="card chart">
+        <h2 class="section-title">Ingresos en el tiempo</h2>
+        <div class="placeholder">Gráfico aquí</div>
+      </article>
+      <article class="card chart">
+        <h2 class="section-title">Métodos de pago</h2>
+        <div class="placeholder">Gráfico aquí</div>
+      </article>
+    </section>
+
+    <!-- Tablas -->
+    <section class="grid-2">
+      <article class="card table">
+        <h2 class="section-title">Top por cantidad</h2>
+        <table>
+          <thead><tr><th>Producto</th><th>Cantidad</th></tr></thead>
+          <tbody>
+            <tr><td>—</td><td>—</td></tr>
+            <tr><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </article>
+      <article class="card table">
+        <h2 class="section-title">Top por ingresos</h2>
+        <table>
+          <thead><tr><th>Producto</th><th>Ingresos</th></tr></thead>
+          <tbody>
+            <tr><td>—</td><td>—</td></tr>
+            <tr><td>—</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
