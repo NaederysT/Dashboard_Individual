@@ -19,7 +19,7 @@
   --grid: rgba(2,6,23,0.08);
   --shadow-1: 0 8px 22px rgba(2, 6, 23, 0.08);
 
-  /* Charts (leídas por makeCharts si usas la versión opcional de abajo) */
+  /* Charts (leídas por makeCharts) */
   --chart-grid:   var(--grid);
   --chart-tick:   #475569;
   --chart-legend: #334155;
@@ -40,11 +40,17 @@
   --btn-bg: #ffffff;
   --btn-tx: #0f172a;
   --btn-bd: rgba(15, 23, 42, 0.12);
+
+  /* Campos de filtros */
+  --field-bg: #ffffff;
+  --field-tx: #0f172a;
+  --field-bd: rgba(15, 23, 42, 0.12);
+  --field-focus: rgba(139,92,246,.35);
 }
 
 /* ===== Dark mode ===== */
 :root[data-theme="dark"]{
-  --bg-1: #0b1021;     /* fondo base */
+  --bg-1: #0b1021;
   --bg-2: #0e142b;
   --tint-rose: #1b1431;
   --tint-lav:  #0e1b38;
@@ -52,8 +58,8 @@
   --card-alpha: rgba(15, 23, 42, 0.55);
   --card-stroke: rgba(148,163,184,0.12);
 
-  --text-1: #e5e7eb;   /* texto principal */
-  --muted:  #94a3b8;   /* texto secundario */
+  --text-1: #e5e7eb;
+  --muted:  #94a3b8;
 
   --accent: #a78bfa;
 
@@ -76,6 +82,12 @@
   --btn-bg: #111827;
   --btn-tx: #e5e7eb;
   --btn-bd: rgba(148,163,184,0.2);
+
+  /* Campos de filtros */
+  --field-bg: rgba(17,24,39,0.6);
+  --field-tx: #e5e7eb;
+  --field-bd: rgba(148,163,184,0.2);
+  --field-focus: rgba(167,139,250,.45);
 }
 
 /* ===== Reset / Fondo ===== */
@@ -138,7 +150,43 @@ header .sub{ color: var(--muted); font-size: 14px; }
 .kpi{ display:grid; gap:6px; background: linear-gradient(180deg, rgba(139,92,246,0.10), rgba(139,92,246,0) 35%); }
 :root[data-theme="dark"] .kpi{ background: linear-gradient(180deg, rgba(167,139,250,0.12), rgba(167,139,250,0.02) 35%); }
 .kpi .label{ color: var(--muted); font-size:12px; }
-.kpi .value{ font-size: clamp(22px, 3.2vw, 30px); font-weight:800; display:flex; justify-content:center; align-items:center;}
+.kpi .value{ font-size: clamp(22px, 3.2vw, 30px); font-weight:500; display:flex; justify-content:center; align-items:center;}
+
+/* ====== INFO CARD (recuadro de ayuda de filtros) ====== */
+.info-card{
+  display:grid;
+  grid-template-columns: auto 1fr auto;
+  gap:14px;
+  align-items:center;
+  padding:16px 18px;
+}
+.info-icon{
+  width:36px; height:36px; border-radius:10px;
+  display:grid; place-items:center;
+  background: linear-gradient(180deg, rgba(139,92,246,.12), rgba(139,92,246,0));
+  border:1px solid rgba(139,92,246,.35);
+  font-size:18px;
+}
+.info-content{ display:grid; gap:6px; }
+.info-title{
+  margin:0;
+  font-size:16px;
+  font-weight:800;
+  color: var(--text-1);
+}
+.info-text{ margin:0; color: var(--muted); font-size:14px; }
+.info-list{ margin:0; padding-left:18px; color: var(--muted); font-size:14px; }
+.info-close{
+  border:1px solid var(--btn-bd);
+  background: var(--btn-bg);
+  color: var(--btn-tx);
+  border-radius:10px;
+  width:34px; height:34px; cursor:pointer;
+}
+@media (max-width:720px){
+  .info-card{ grid-template-columns: auto 1fr; }
+  .info-close{ grid-column: 2 / -1; justify-self:end; }
+}
 
 /* Grid de charts */
 .grid{
@@ -154,11 +202,56 @@ header .sub{ color: var(--muted); font-size: 14px; }
 .chart-title{
   display:flex; justify-content:center; align-items:center;
   text-align:center;
-  font-size: clamp(16px, 2vw, 18px);   /* ↑ tamaño */
+  font-size: clamp(16px, 2vw, 18px);
   letter-spacing: .2px;
-  color: var(--text-1);                /* más contraste que muted */
-  margin-bottom:12px;
+  color: var(--text-1);
+  margin-bottom:8px;
 }
+
+/* ===== Filtros (alineados y centrados) ===== */
+.chart-filters{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 16px;
+  align-items:flex-end;
+  justify-content:center;
+  margin: 6px auto 10px;
+  max-width:100%;
+}
+.chart-filters label{
+  display:flex; flex-direction:column; gap:6px;
+  font-size:12px; color: var(--muted);
+  min-width:160px;
+}
+.chart-filters select,
+.chart-filters input[type="date"]{
+  height:38px;
+  padding:8px 12px;
+  border-radius:10px;
+  border:1px solid var(--field-bd);
+  background: var(--field-bg);
+  color: var(--field-tx);
+  outline: none;
+}
+.chart-filters select:focus,
+.chart-filters input[type="date"]:focus{
+  box-shadow: 0 0 0 3px var(--field-focus);
+  border-color: var(--accent);
+}
+.chart-filters button{
+  height:38px;
+  padding:0 14px;
+  border-radius:10px;
+  border:1px solid var(--btn-bd);
+  background: var(--btn-bg);
+  color: var(--btn-tx);
+  cursor:pointer;
+}
+.chart-filters button[data-action="apply"]{
+  background: linear-gradient(180deg, rgba(139,92,246,.10), rgba(139,92,246,0));
+  border-color: rgba(139,92,246,.35);
+}
+.chart-filters button:hover{ filter: brightness(0.985); }
 
 /* Wrapper de canvas (altura fija + aire + contención) */
 .chart-body{
@@ -168,7 +261,6 @@ header .sub{ color: var(--muted); font-size: 14px; }
   border-radius: 12px;
   overflow: hidden;
   contain: layout paint size; /* evita crecimiento “infinito” */
-  /* un ligero tinte para distinguir el canvas del fondo de la card */
   background: linear-gradient(180deg, rgba(139,92,246,0.05), rgba(139,92,246,0.02));
 }
 :root[data-theme="dark"] .chart-body{

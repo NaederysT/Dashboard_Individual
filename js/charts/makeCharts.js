@@ -44,11 +44,21 @@ export function destroyCharts() {
   charts = {};
 }
 
+/* helper: destruye instancia previa por clave antes de re-crear */
+function safeDestroy(key) {
+  const c = charts[key];
+  if (c && typeof c.destroy === 'function') {
+    try { c.destroy(); } catch {}
+    charts[key] = undefined;
+  }
+}
+
 /* ========= Permite refrescar colores sin re-crear charts ========= */
 export function refreshChartTheme() {
   THEME = buildThemeFromCSS();
   for (const key in charts) {
     const c = charts[key];
+    if (!c) continue;
     try {
       if (c.config.type === 'bar') {
         const ds = c.data.datasets?.[0];
@@ -76,6 +86,7 @@ export function refreshChartTheme() {
         const ds = c.data.datasets?.[0];
         if (ds) ds.backgroundColor = THEME.doughnut;
         c.options.plugins.legend.labels.color = THEME.legend;
+        // si usas font por variables, puedes setear aquí también
       }
       c.update('none');
     } catch {}
@@ -90,6 +101,7 @@ export function makeBarChart(ctx, labels, data, {
   key,
   showLegend = false
 }) {
+  safeDestroy(key); // <- evita conflicto al re-render
   charts[key] = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -142,6 +154,7 @@ export function makeLineChart(ctx, labels, data, label, {
   key,
   showLegend = false
 }) {
+  safeDestroy(key); // <- evita conflicto al re-render
   charts[key] = new Chart(ctx, {
     type: 'line',
     data: {
@@ -193,6 +206,7 @@ export function makeDoughnutChart(ctx, labels, data, label, {
   key,
   showLegend = true
 }) {
+  safeDestroy(key); // <- evita conflicto al re-render
   charts[key] = new Chart(ctx, {
     type: 'doughnut',
     data: {
@@ -208,7 +222,15 @@ export function makeDoughnutChart(ctx, labels, data, label, {
       layout: { padding: { top: 6, right: 10, bottom: 8, left: 10 } },
       plugins: {
         title: { display: false },
-        legend: { display: showLegend, position: 'bottom', labels: { color: THEME.legend, padding: 12, font: { size: 15, weight: '700' } },  },
+        legend: {
+          display: showLegend,
+          position: 'bottom',
+          labels: {
+            color: THEME.legend,
+            padding: 12,
+            font: { size: 15, weight: '700' } // leyenda más grande y negrita
+          }
+        },
         tooltip: {
           callbacks: { label: (ctx) => `${ctx.label}: ${ctx.parsed?.toLocaleString?.('es-CL') ?? ctx.parsed}` }
         },

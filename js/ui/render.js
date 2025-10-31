@@ -1,17 +1,30 @@
 // /js/ui/render.js
+import { fmtCurrency, fmtNumber } from '../core/formatters.js';
+
 export function renderKpis(kpis) {
-  setText('kpiRevenue', formatCurrency(kpis.revenue));
-  setText('kpiUnits',   formatNumber(kpis.units));
-  setText('kpiTx',      formatNumber(kpis.tx));
-  // kpiATV eliminado (ticket promedio)
+  setText('kpiRevenue', fmtCurrency(kpis.revenue)); // USD
+  setText('kpiUnits',   fmtNumber(kpis.units));
+  setText('kpiTx',      fmtNumber(kpis.tx));
 }
 
 export function fillTopTable(tableId, arr, valueFormatter) {
-  const tbody = document.querySelector(`#${tableId} tbody`);
+  const table = document.getElementById(tableId);
+  if (!table) return;
+
+  const tbody = table.querySelector('tbody') || table.appendChild(document.createElement('tbody'));
   tbody.innerHTML = '';
-  for (const [name, value] of arr) {
+
+  const safeArr = Array.isArray(arr) ? arr : [];
+
+  for (const [name, value] of safeArr) {
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${name}</td><td>${valueFormatter(value)}</td>`;
+    tr.innerHTML = `<td>${name ?? '-'}</td><td>${valueFormatter(value)}</td>`;
+    tbody.appendChild(tr);
+  }
+
+  if (!safeArr.length) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td colspan="2" style="color: var(--muted);">Sin datos para mostrar.</td>`;
     tbody.appendChild(tr);
   }
 }
@@ -26,10 +39,4 @@ export function showOrHideCategoryCard(visible) {
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value;
-}
-function formatCurrency(n, symbol = '$') {
-  return symbol + Number(n || 0).toLocaleString('es-CL', { maximumFractionDigits: 0 });
-}
-function formatNumber(n) {
-  return Number(n || 0).toLocaleString('es-CL');
 }

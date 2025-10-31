@@ -1,126 +1,314 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>Dashboard de Ventas — Marketing</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard de Ventas — Marketing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="assets/css/style.css" />
-</head>
-<body>
-  <header>
-    <h1>Dashboard de Ventas</h1>
-    <div class="sub">Análisis de productos, ventas, pagos y distribución geográfica</div>
-<div class="controls">
-  <button id="btnLoadDefault">Cargar CSV por defecto (data/datos_taller_software.csv)</button>
-  <span class="hint">o</span>
-  <input type="file" id="fileInput" accept=".csv" />
-  <span class="hint">Usa Live Server o el botón “Cargar CSV”.</span>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Toggle tema -->
-  <button id="themeToggle" class="theme-toggle" style="margin-left:auto">
-    <!-- icono simple; se reemplaza según tema en JS -->
-    <span id="themeIcon">🌙</span>
-    <span id="themeLabel">Oscuro</span>
-  </button>
-</div>
-
-  </header>
-
-  <main class="wrap">
-    <!-- KPIs (3 columnas) -->
-    <section class="kpis">
-      <div class="card kpi">
-        <div class="chart-title">Monto TOTAL</div>
-        <div class="value" id="kpiRevenue">$0</div>
-        <div class="delta" id="kpiRevenueHint"></div>
+    <!-- Estilos -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Dashboard de Ventas</h1>
+      <div class="sub">
+        Análisis de productos, ventas, pagos y distribución geográfica
       </div>
-      <div class="card kpi">
-        <div class="chart-title">Unidades Vendidas</div>
-        <div class="value" id="kpiUnits">0</div>
-        <div class="delta" id="kpiUnitsHint"></div>
-      </div>
-      <div class="card kpi">
-        <div class="chart-title">Ventas Totales</div>
-        <div class="value" id="kpiTx">0</div>
-        <div class="delta" id="kpiTxHint"></div>
-      </div>
-    </section>
 
-    <!-- Gráficos -->
-    <section class="grid">
-      <div class="card chart-card">
-        <div class="chart-title"><span>Top 5 productos por cantidad</span></div>
-        <div class="chart-body">
-          <canvas id="chartProductsQty"></canvas>
+      <div class="controls">
+        <button id="btnLoadDefault">
+          Cargar CSV por defecto (data/datos_taller_software.csv)
+        </button>
+        <span class="hint">o</span>
+        <input type="file" id="fileInput" accept=".csv" />
+        <span class="hint">Usa Live Server o el botón “Cargar CSV”.</span>
+
+        <!-- Toggle tema -->
+        <button id="themeToggle" class="theme-toggle" style="margin-left: auto">
+          <span id="themeIcon">🌙</span>
+          <span id="themeLabel">Oscuro</span>
+        </button>
+
+        <!-- Toggle ayuda de filtros (sin “X” en la caja) -->
+        <button
+          id="showFiltersHelp"
+          class="theme-toggle"
+          title="Mostrar u ocultar ayuda de filtros"
+          aria-pressed="false"
+        >
+          <span>❔</span>
+          <span id="filtersHelpBtnText">Mostrar ayuda de filtros</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- KPIs (3 columnas) -->
+      <section class="kpis">
+        <div class="card kpi">
+          <div class="chart-title">Monto TOTAL</div>
+          <div class="value" id="kpiRevenue">$0</div>
+          <div class="delta" id="kpiRevenueHint"></div>
         </div>
-      </div>
-
-      <div class="card chart-card">
-        <div class="chart-title"><span>Top 5 productos por Ventas</span></div>
-        <div class="chart-body">
-          <canvas id="chartProductsRevenue"></canvas>
+        <div class="card kpi">
+          <div class="chart-title">Unidades Vendidas</div>
+          <div class="value" id="kpiUnits">0</div>
+          <div class="delta" id="kpiUnitsHint"></div>
         </div>
-      </div>
-
-      <!-- ocupa 100% del ancho -->
-      <div class="card chart-card full" style="grid-column: 1 / -1;">
-        <div class="chart-title"><span>Ventas en el tiempo (por mes)</span></div>
-        <div class="chart-body">
-          <canvas id="chartTime"></canvas>
+        <div class="card kpi">
+          <div class="chart-title">Ventas Totales</div>
+          <div class="value" id="kpiTx">0</div>
+          <div class="delta" id="kpiTxHint"></div>
         </div>
-      </div>
+      </section>
 
-      <div class="card chart-card">
-        <div class="chart-title"><span>Métodos de pago más usados</span></div>
-        <div class="chart-body">
-          <canvas id="chartPayments"></canvas>
+      <!-- ========== RECUADRO INFORMATIVO DE FILTROS (sin botón X) ========== -->
+      <section class="card info-card" id="infoFilters">
+        <div class="info-icon" aria-hidden="true">✨</div>
+        <div class="info-content">
+          <h3 class="info-title">
+            Tip: usa los filtros para explorar tus datos
+          </h3>
+          <p class="info-text">
+            Sobre cada gráfico encontrarás filtros para
+            <strong>categoría</strong>, <strong>método de pago</strong> y
+            <strong>rango de fechas</strong>.
+          </p>
+          <ul class="info-list">
+            <li>Elige una <b>categoría</b> o deja “Todas”.</li>
+            <li>
+              Selecciona fecha <b>Desde/Hasta</b> con los calendarios; los
+              límites se ajustan a tus datos.
+            </li>
+            <li>
+              Presiona <b>Aplicar</b> para actualizar el gráfico o
+              <b>Limpiar</b> para restablecer.
+            </li>
+          </ul>
         </div>
-      </div>
+      </section>
+      <!-- ===================================================== -->
 
-      <div class="card chart-card">
-        <div class="chart-title"><span>Unidades vendidas por categoría</span></div>
-        <div class="chart-body">
-          <canvas id="chartCategoriesQty"></canvas>
+      <!-- Gráficos -->
+      <section class="grid">
+        <!-- Top 5 productos por cantidad -->
+        <div class="card chart-card">
+          <div class="chart-title">
+            <span>Top 5 productos por cantidad</span>
+          </div>
+          <form class="chart-filters" id="filtersProductsQty">
+            <label>
+              Categoría
+              <select name="category">
+                <option value="ALL">Todas</option>
+              </select>
+            </label>
+            <label>
+              Desde
+              <input type="date" name="from" />
+            </label>
+            <label>
+              Hasta
+              <input type="date" name="to" />
+            </label>
+            <button type="button" data-action="apply">Aplicar</button>
+            <button type="button" data-action="reset">Limpiar</button>
+          </form>
+          <div class="chart-body">
+            <canvas id="chartProductsQty"></canvas>
+          </div>
         </div>
-      </div>
 
-      <div class="card chart-card" style="grid-column: 1 / -1;">
-        <div class="chart-title"><span>Distribución de ventas por Región / País</span></div>
-        <div class="chart-body">
-          <canvas id="chartGeo"></canvas>
+        <!-- Top 5 productos por Ventas -->
+        <div class="card chart-card">
+          <div class="chart-title"><span>Top 5 productos por Ventas</span></div>
+          <form class="chart-filters" id="filtersProductsRevenue">
+            <label>
+              Categoría
+              <select name="category">
+                <option value="ALL">Todas</option>
+              </select>
+            </label>
+            <label>
+              Desde
+              <input type="date" name="from" />
+            </label>
+            <label>
+              Hasta
+              <input type="date" name="to" />
+            </label>
+            <button type="button" data-action="apply">Aplicar</button>
+            <button type="button" data-action="reset">Limpiar</button>
+          </form>
+          <div class="chart-body">
+            <canvas id="chartProductsRevenue"></canvas>
+          </div>
         </div>
-      </div>
-    </section>
 
-    <!-- Tablas resumen -->
-    <section class="card">
-      <div class="chart-title">
-        <span>Resumen tabular — Top productos (cantidad y ventas)</span>
-      </div>
-      <div class="grid">
-        <div>
-          <table class="table" id="tableTopQty">
-            <thead><tr><th>Producto</th><th>Cantidad</th></tr></thead>
-            <tbody></tbody>
-          </table>
+        <!-- Ventas en el tiempo (100% ancho) -->
+        <div class="card chart-card full" style="grid-column: 1 / -1">
+          <div class="chart-title">
+            <span>Ventas en el tiempo (por mes / trimestre)</span>
+          </div>
+          <form class="chart-filters" id="filtersTime">
+            <label>
+              Categoría
+              <select name="category">
+                <option value="ALL">Todas</option>
+              </select>
+            </label>
+            <label>
+              Método de pago
+              <select name="pay">
+                <option value="ALL">Todos</option>
+              </select>
+            </label>
+
+            <!-- 🔽 NUEVO: Granularidad -->
+            <label>
+              Granularidad
+              <select name="gran">
+                <option value="month" selected>Mes</option>
+                <option value="quarter">Trimestre</option>
+              </select>
+            </label>
+
+            <label>
+              Desde
+              <input type="date" name="from" />
+            </label>
+            <label>
+              Hasta
+              <input type="date" name="to" />
+            </label>
+            <button type="button" data-action="apply">Aplicar</button>
+            <button type="button" data-action="reset">Limpiar</button>
+          </form>
+          <div class="chart-body">
+            <canvas id="chartTime"></canvas>
+          </div>
         </div>
-        <div>
-          <table class="table" id="tableTopRevenue">
-            <thead><tr><th>Producto</th><th>Ventas</th></tr></thead>
-            <tbody></tbody>
-          </table>
+
+        <!-- Métodos de pago -->
+        <div class="card chart-card">
+          <div class="chart-title"><span>Métodos de pago más usados</span></div>
+          <form class="chart-filters" id="filtersPayments">
+            <label>
+              Categoría
+              <select name="category">
+                <option value="ALL">Todas</option>
+              </select>
+            </label>
+            <label>
+              Desde
+              <input type="date" name="from" />
+            </label>
+            <label>
+              Hasta
+              <input type="date" name="to" />
+            </label>
+            <button type="button" data-action="apply">Aplicar</button>
+            <button type="button" data-action="reset">Limpiar</button>
+          </form>
+          <div class="chart-body">
+            <canvas id="chartPayments"></canvas>
+          </div>
         </div>
-      </div>
-    </section>
-  </main>
 
-  <footer>
-    Construido con HTML, CSS y JS puro + Chart.js. Métricas calculadas con funciones utilitarias.
-  </footer>
+        <!-- Unidades por categoría -->
+        <div class="card chart-card">
+          <div class="chart-title">
+            <span>Unidades vendidas por categoría</span>
+          </div>
+          <form class="chart-filters" id="filtersCategoriesQty">
+            <label>
+              Desde
+              <input type="date" name="from" />
+            </label>
+            <label>
+              Hasta
+              <input type="date" name="to" />
+            </label>
+            <button type="button" data-action="apply">Aplicar</button>
+            <button type="button" data-action="reset">Limpiar</button>
+          </form>
+          <div class="chart-body">
+            <canvas id="chartCategoriesQty"></canvas>
+          </div>
+        </div>
 
-  <script type="module" src="js/app.js"></script>
-  <script type="module" src="js/theme-toggle.js"></script>
-</body>
+        <!-- Geo -->
+        <div class="card chart-card" style="grid-column: 1 / -1">
+          <div class="chart-title">
+            <span>Distribución de ventas por Región / País</span>
+          </div>
+          <form class="chart-filters" id="filtersGeo">
+            <label>
+              Categoría
+              <select name="category">
+                <option value="ALL">Todas</option>
+              </select>
+            </label>
+            <label>
+              Desde
+              <input type="date" name="from" />
+            </label>
+            <label>
+              Hasta
+              <input type="date" name="to" />
+            </label>
+            <button type="button" data-action="apply">Aplicar</button>
+            <button type="button" data-action="reset">Limpiar</button>
+          </form>
+          <div class="chart-body">
+            <canvas id="chartGeo"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tablas resumen (globales, sin filtros) -->
+      <section class="card">
+        <div class="chart-title">
+          <span>Resumen tabular — Top productos (cantidad y ventas)</span>
+        </div>
+        <div class="grid">
+          <div>
+            <table class="table" id="tableTopQty">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div>
+            <table class="table" id="tableTopRevenue">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Ventas</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Construido con HTML, CSS y JS puro + Chart.js. Métricas calculadas con
+      funciones utilitarias.
+    </footer>
+
+    <!-- JS principal y toggle de tema -->
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/theme-toggle.js"></script>
+    <script type="module" src="js/ui/info-tip.js"></script>
+  </body>
 </html>
