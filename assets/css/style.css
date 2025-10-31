@@ -1,32 +1,33 @@
-/* ===== Tema "Glass Pastel Dashboard" (Light) + Dark Mode ===== */
-:root{
-  /* Base */
+/* ===== Tema base (light) y variables reutilizables ===== */
+:root {
+  /* Colores de fondo base */
   --bg-1: #f3f4f6;
   --bg-2: #f8fafc;
   --tint-rose: #fbe9e7;
-  --tint-lav:  #ede9fe;
+  --tint-lav: #ede9fe;
 
-  /* Superficies */
-  --card-alpha: rgba(255,255,255,0.70);
+  /* Superficies translúcidas */
+  --card-alpha: rgba(255, 255, 255, 0.7);
   --card-stroke: rgba(15, 23, 42, 0.08);
 
-  /* Texto */
+  /* Texto y muteds */
   --text-1: #0f172a;
-  --muted:  #6b7280;
+  --muted: #6b7280;
 
-  /* UI */
+  /* UI y sombras */
   --accent: #8b5cf6;
-  --grid: rgba(2,6,23,0.08);
+  --grid: rgba(2, 6, 23, 0.08);
   --shadow-1: 0 8px 22px rgba(2, 6, 23, 0.08);
 
-  /* Charts (leídas por makeCharts) */
-  --chart-grid:   var(--grid);
-  --chart-tick:   #475569;
+  /* Tokens para Chart.js (leídos por makeCharts) */
+  --chart-grid: var(--grid);
+  --chart-tick: #475569;
   --chart-legend: #334155;
 
-  --series-1:       rgba(139, 92, 246, 0.85);
-  --series-1b:      rgba(139, 92, 246, 1);
-  --series-1-soft:  rgba(167, 139, 250, 0.5);
+  /* Paleta de series */
+  --series-1: rgba(139, 92, 246, 0.85);
+  --series-1b: rgba(139, 92, 246, 1);
+  --series-1-soft: rgba(167, 139, 250, 0.5);
   --series-2: #fca5a5;
   --series-3: #fbbf24;
   --series-4: #22d3ee;
@@ -36,7 +37,7 @@
   --chart-h: 340px;
   --chart-h-wide: 380px;
 
-  /* Botón tema */
+  /* Botón de tema */
   --btn-bg: #ffffff;
   --btn-tx: #0f172a;
   --btn-bd: rgba(15, 23, 42, 0.12);
@@ -45,35 +46,36 @@
   --field-bg: #ffffff;
   --field-tx: #0f172a;
   --field-bd: rgba(15, 23, 42, 0.12);
-  --field-focus: rgba(139,92,246,.35);
+  --field-focus: rgba(139, 92, 246, 0.35);
 }
 
-/* ===== Dark mode ===== */
-:root[data-theme="dark"]{
+/* ===== Modo oscuro (override de variables) ===== */
+:root[data-theme="dark"] {
   --bg-1: #0b1021;
   --bg-2: #0e142b;
   --tint-rose: #1b1431;
-  --tint-lav:  #0e1b38;
+  --tint-lav: #0e1b38;
 
   --card-alpha: rgba(15, 23, 42, 0.55);
-  --card-stroke: rgba(148,163,184,0.12);
+  --card-stroke: rgba(148, 163, 184, 0.12);
 
   --text-1: #e5e7eb;
-  --muted:  #94a3b8;
+  --muted: #94a3b8;
 
   --accent: #a78bfa;
 
-  --grid: rgba(226,232,240,0.12);
-  --shadow-1: 0 10px 26px rgba(0,0,0,0.45);
+  --grid: rgba(226, 232, 240, 0.12);
+  --shadow-1: 0 10px 26px rgba(0, 0, 0, 0.45);
 
-  /* Charts */
-  --chart-grid:   rgba(226,232,240,0.12);
-  --chart-tick:   #cbd5e1;
+  /* Tokens para Chart.js en dark */
+  --chart-grid: rgba(226, 232, 240, 0.12);
+  --chart-tick: #cbd5e1;
   --chart-legend: #e2e8f0;
 
-  --series-1:       rgba(167,139,250,0.85);
-  --series-1b:      rgba(167,139,250,1);
-  --series-1-soft:  rgba(167,139,250,0.25);
+  /* Paleta de series en dark */
+  --series-1: rgba(167, 139, 250, 0.85);
+  --series-1b: rgba(167, 139, 250, 1);
+  --series-1-soft: rgba(167, 139, 250, 0.25);
   --series-2: #34d399;
   --series-3: #22d3ee;
   --series-4: #a78bfa;
@@ -81,216 +83,359 @@
 
   --btn-bg: #111827;
   --btn-tx: #e5e7eb;
-  --btn-bd: rgba(148,163,184,0.2);
+  --btn-bd: rgba(148, 163, 184, 0.2);
 
-  /* Campos de filtros */
-  --field-bg: rgba(17,24,39,0.6);
+  /* Campos de filtros en dark */
+  --field-bg: rgba(17, 24, 39, 0.6);
   --field-tx: #e5e7eb;
-  --field-bd: rgba(148,163,184,0.2);
-  --field-focus: rgba(167,139,250,.45);
+  --field-bd: rgba(148, 163, 184, 0.2);
+  --field-focus: rgba(167, 139, 250, 0.45);
 }
 
-/* ===== Reset / Fondo ===== */
-*{ box-sizing: border-box; }
-body{
-  margin:0;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, Helvetica;
+/* ===== Reset básico y fondo con gradientes ===== */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Arial, Helvetica;
   color: var(--text-1);
-  background:
-    radial-gradient(900px 450px at 0% 0%, var(--tint-rose), transparent 55%),
+  background: radial-gradient(
+      900px 450px at 0% 0%,
+      var(--tint-rose),
+      transparent 55%
+    ),
     radial-gradient(800px 400px at 100% 10%, var(--tint-lav), transparent 60%),
     linear-gradient(180deg, var(--bg-2), var(--bg-1));
 }
 
-/* ===== Header ===== */
-header{
-  padding:16px clamp(16px,5vw,32px);
-  display:grid; gap:10px;
-  border-bottom:1px solid var(--card-stroke);
+/* ===== Header con controles y separación ===== */
+header {
+  padding: 16px clamp(16px, 5vw, 32px);
+  display: grid;
+  gap: 10px;
+  border-bottom: 1px solid var(--card-stroke);
   background: transparent;
 }
-header h1{ margin:0; font-weight:800; font-size: clamp(20px,3vw,28px); }
-header .sub{ color: var(--muted); font-size: 14px; }
-.controls{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-.controls button,
-.controls input[type="file"]::file-selector-button{
-  background: var(--btn-bg); color:var(--btn-tx);
-  border:1px solid var(--btn-bd);
-  padding:10px 14px; border-radius:12px; cursor:pointer; box-shadow: var(--shadow-1);
+header h1 {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(20px, 3vw, 28px);
 }
-.controls input[type="file"]{
+header .sub {
   color: var(--muted);
-  border:1px dashed var(--card-stroke);
-  padding:7px; border-radius:12px; background: transparent;
+  font-size: 14px;
 }
-.hint{ color:var(--muted); font-size:12px; }
-
-/* ===== Layout ===== */
-.wrap{ padding:24px clamp(12px,5vw,40px); display:grid; gap:24px; }
-
-/* KPIs (3 columnas) */
-.kpis{
-  display:grid; gap:16px;
-  grid-template-columns: repeat(3, minmax(0,1fr));
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
 }
-@media (max-width:1100px){ .kpis{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (max-width:640px){ .kpis{ grid-template-columns: 1fr; } }
+.controls button,
+.controls input[type="file"]::file-selector-button {
+  background: var(--btn-bg);
+  color: var(--btn-tx);
+  border: 1px solid var(--btn-bd);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+}
+.controls input[type="file"] {
+  color: var(--muted);
+  border: 1px dashed var(--card-stroke);
+  padding: 7px;
+  border-radius: 12px;
+  background: transparent;
+}
+.hint {
+  color: var(--muted);
+  font-size: 12px;
+}
 
-/* Card base */
-.card{
-  border:1px solid var(--card-stroke);
-  border-radius:16px;
+/* ===== Contenedor principal con grid vertical ===== */
+.wrap {
+  padding: 24px clamp(12px, 5vw, 40px);
+  display: grid;
+  gap: 24px;
+}
+
+/* ===== KPIs en grid responsivo ===== */
+.kpis {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 1100px) {
+  .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  .kpis {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== Card base translúcida con blur ===== */
+.card {
+  border: 1px solid var(--card-stroke);
+  border-radius: 16px;
   background: var(--card-alpha);
   backdrop-filter: blur(8px);
   box-shadow: var(--shadow-1);
-  padding:16px;
+  padding: 16px;
 }
 
-/* KPI */
-.kpi{ display:grid; gap:6px; background: linear-gradient(180deg, rgba(139,92,246,0.10), rgba(139,92,246,0) 35%); }
-:root[data-theme="dark"] .kpi{ background: linear-gradient(180deg, rgba(167,139,250,0.12), rgba(167,139,250,0.02) 35%); }
-.kpi .label{ color: var(--muted); font-size:12px; }
-.kpi .value{ font-size: clamp(22px, 3.2vw, 30px); font-weight:500; display:flex; justify-content:center; align-items:center;}
+/* ===== KPI con degradado sutil y tipografía marcada ===== */
+.kpi {
+  display: grid;
+  gap: 6px;
+  background: linear-gradient(
+    180deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(139, 92, 246, 0) 35%
+  );
+}
+:root[data-theme="dark"] .kpi {
+  background: linear-gradient(
+    180deg,
+    rgba(167, 139, 250, 0.12),
+    rgba(167, 139, 250, 0.02) 35%
+  );
+}
+.kpi .label {
+  color: var(--muted);
+  font-size: 12px;
+}
+.kpi .value {
+  font-size: clamp(22px, 3.2vw, 30px);
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-/* ====== INFO CARD (recuadro de ayuda de filtros) ====== */
-.info-card{
-  display:grid;
+/* ===== Recuadro informativo de filtros (layout y estilos) ===== */
+.info-card {
+  display: grid;
   grid-template-columns: auto 1fr auto;
-  gap:14px;
-  align-items:center;
-  padding:16px 18px;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
 }
-.info-icon{
-  width:36px; height:36px; border-radius:10px;
-  display:grid; place-items:center;
-  background: linear-gradient(180deg, rgba(139,92,246,.12), rgba(139,92,246,0));
-  border:1px solid rgba(139,92,246,.35);
-  font-size:18px;
+.info-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(
+    180deg,
+    rgba(139, 92, 246, 0.12),
+    rgba(139, 92, 246, 0)
+  );
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  font-size: 18px;
 }
-.info-content{ display:grid; gap:6px; }
-.info-title{
-  margin:0;
-  font-size:16px;
-  font-weight:800;
+.info-content {
+  display: grid;
+  gap: 6px;
+}
+.info-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
   color: var(--text-1);
 }
-.info-text{ margin:0; color: var(--muted); font-size:14px; }
-.info-list{ margin:0; padding-left:18px; color: var(--muted); font-size:14px; }
-.info-close{
-  border:1px solid var(--btn-bd);
+.info-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.info-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.info-close {
+  border: 1px solid var(--btn-bd);
   background: var(--btn-bg);
   color: var(--btn-tx);
-  border-radius:10px;
-  width:34px; height:34px; cursor:pointer;
+  border-radius: 10px;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
 }
-@media (max-width:720px){
-  .info-card{ grid-template-columns: auto 1fr; }
-  .info-close{ grid-column: 2 / -1; justify-self:end; }
+@media (max-width: 720px) {
+  .info-card {
+    grid-template-columns: auto 1fr;
+  }
+  .info-close {
+    grid-column: 2 / -1;
+    justify-self: end;
+  }
 }
 
-/* Grid de charts */
-.grid{
-  display:grid; gap:16px;
+/* ===== Grid para tarjetas de charts (2 columnas a 1 en mobile) ===== */
+.grid {
+  display: grid;
+  gap: 16px;
   grid-template-columns: 2fr 2fr;
 }
-@media (max-width:1100px){ .grid{ grid-template-columns: 1fr; } }
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
 
-/* === Cards de gráficos === */
-.chart-card{ padding:14px 16px; }
+/* ===== Tarjeta de gráfico con padding consistente ===== */
+.chart-card {
+  padding: 14px 16px;
+}
 
-/* Título centrado, más grande y más “bold” */
-.chart-title{
-  display:flex; justify-content:center; align-items:center;
-  text-align:center;
+/* ===== Título de gráfico centrado y legible ===== */
+.chart-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   font-size: clamp(16px, 2vw, 18px);
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   color: var(--text-1);
-  margin-bottom:8px;
+  margin-bottom: 8px;
 }
 
-/* ===== Filtros (alineados y centrados) ===== */
-.chart-filters{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px 16px;
-  align-items:flex-end;
-  justify-content:center;
+/* ===== Controles de filtros alineados y responsivos ===== */
+.chart-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  align-items: flex-end;
+  justify-content: center;
   margin: 6px auto 10px;
-  max-width:100%;
+  max-width: 100%;
 }
-.chart-filters label{
-  display:flex; flex-direction:column; gap:6px;
-  font-size:12px; color: var(--muted);
-  min-width:160px;
+.chart-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 160px;
 }
 .chart-filters select,
-.chart-filters input[type="date"]{
-  height:38px;
-  padding:8px 12px;
-  border-radius:10px;
-  border:1px solid var(--field-bd);
+.chart-filters input[type="date"] {
+  height: 38px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--field-bd);
   background: var(--field-bg);
   color: var(--field-tx);
   outline: none;
 }
 .chart-filters select:focus,
-.chart-filters input[type="date"]:focus{
+.chart-filters input[type="date"]:focus {
   box-shadow: 0 0 0 3px var(--field-focus);
   border-color: var(--accent);
 }
-.chart-filters button{
-  height:38px;
-  padding:0 14px;
-  border-radius:10px;
-  border:1px solid var(--btn-bd);
+.chart-filters button {
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--btn-bd);
   background: var(--btn-bg);
   color: var(--btn-tx);
-  cursor:pointer;
+  cursor: pointer;
 }
-.chart-filters button[data-action="apply"]{
-  background: linear-gradient(180deg, rgba(139,92,246,.10), rgba(139,92,246,0));
-  border-color: rgba(139,92,246,.35);
+.chart-filters button[data-action="apply"] {
+  background: linear-gradient(
+    180deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(139, 92, 246, 0)
+  );
+  border-color: rgba(139, 92, 246, 0.35);
 }
-.chart-filters button:hover{ filter: brightness(0.985); }
+.chart-filters button:hover {
+  filter: brightness(0.985);
+}
 
-/* Wrapper de canvas (altura fija + aire + contención) */
-.chart-body{
+/* ===== Contenedor del canvas con altura fija y contención ===== */
+.chart-body {
   position: relative;
   height: var(--chart-h);
   padding: 14px;
   border-radius: 12px;
   overflow: hidden;
-  contain: layout paint size; /* evita crecimiento “infinito” */
-  background: linear-gradient(180deg, rgba(139,92,246,0.05), rgba(139,92,246,0.02));
+  contain: layout paint size; /* evita crecimiento infinito del canvas */
+  background: linear-gradient(
+    180deg,
+    rgba(139, 92, 246, 0.05),
+    rgba(139, 92, 246, 0.02)
+  );
 }
-:root[data-theme="dark"] .chart-body{
-  background: linear-gradient(180deg, rgba(167,139,250,0.10), rgba(167,139,250,0.03));
+:root[data-theme="dark"] .chart-body {
+  background: linear-gradient(
+    180deg,
+    rgba(167, 139, 250, 0.1),
+    rgba(167, 139, 250, 0.03)
+  );
 }
 
-/* Canvas ocupa todo el wrapper */
-.chart-body canvas{
-  display:block;
+/* ===== Canvas ocupa todo el wrapper y hereda radios ===== */
+.chart-body canvas {
+  display: block;
   width: 100% !important;
   height: 100% !important;
   border-radius: 10px;
 }
 
-/* Chart de tiempo más alto */
-.chart-card.full .chart-body{ height: var(--chart-h-wide); }
-
-/* Tablas */
-.table{ width:100%; border-collapse: collapse; font-size:14px; }
-.table th, .table td{ padding:10px 12px; border-bottom:1px solid var(--card-stroke); }
-.table th{ text-align:left; color:var(--muted); font-weight:700; }
-
-/* Footer */
-footer{ padding:24px clamp(12px,5vw,40px); color:var(--muted); font-size:12px; }
-
-/* Toggle visual */
-.theme-toggle{
-  display:inline-flex; align-items:center; gap:8px;
-  background: var(--btn-bg); color: var(--btn-tx);
-  border:1px solid var(--btn-bd);
-  padding:8px 12px; border-radius:12px; cursor:pointer;
+/* ===== Variante alta para gráfico de tiempo ===== */
+.chart-card.full .chart-body {
+  height: var(--chart-h-wide);
 }
-.theme-toggle svg{ width:18px; height:18px; display:block; }
+
+/* ===== Tabla básica para resúmenes ===== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.table th,
+.table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--card-stroke);
+}
+.table th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* ===== Footer simple con tipografía secundaria ===== */
+footer {
+  padding: 24px clamp(12px, 5vw, 40px);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ===== Botón/Toggle reutilizable (tema y ayudas) ===== */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--btn-bg);
+  color: var(--btn-tx);
+  border: 1px solid var(--btn-bd);
+  padding: 8px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}

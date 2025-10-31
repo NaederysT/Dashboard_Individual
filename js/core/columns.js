@@ -1,6 +1,8 @@
-// /js/core/columns.js
-import { normalizeKey } from './csv.js';
+// /js/core/columns.js — Mapea nombres de columnas reales a claves estándar esperadas por la app
 
+import { normalizeKey } from "./csv.js";
+
+// Retorna la primera clave existente en obj a partir de una lista de alias candidatos
 function getFirstExistingKey(obj, candidates) {
   for (const c of candidates) {
     const k = normalizeKey(c);
@@ -9,45 +11,98 @@ function getFirstExistingKey(obj, candidates) {
   return null;
 }
 
+// Construye el objeto COLS con las claves canónicas detectadas y valida requeridos
 export function mapColumns(sampleRow) {
   const COLS = {
     product: getFirstExistingKey(sampleRow, [
-      'nombre_producto','producto','nombre','item','articulo','artículo',
+      // Nombre del producto
+      "nombre_producto",
+      "producto",
+      "nombre",
+      "item",
+      "articulo",
+      "artículo",
     ]),
     qty: getFirstExistingKey(sampleRow, [
-      'cantidad','unidades','cantidad_vendida','cant','unidades_vendidas',
+      // Cantidad/unidades vendidas
+      "cantidad",
+      "unidades",
+      "cantidad_vendida",
+      "cant",
+      "unidades_vendidas",
     ]),
     revenue: getFirstExistingKey(sampleRow, [
-      'total','ingresos','monto_total','importe','total_venta','venta_total',
-      'total_clp','total_$','total_con_iva','total_sin_iva','total_bruto','total_neto',
+      // Monto/ingresos totales de la fila
+      "total",
+      "ingresos",
+      "monto_total",
+      "importe",
+      "total_venta",
+      "venta_total",
+      "total_clp",
+      "total_$",
+      "total_con_iva",
+      "total_sin_iva",
+      "total_bruto",
+      "total_neto",
     ]),
     unit: getFirstExistingKey(sampleRow, [
-      'precio_unitario','precio','valor_unitario','pu',
+      // Precio unitario (fallback para revenue)
+      "precio_unitario",
+      "precio",
+      "valor_unitario",
+      "pu",
     ]),
     date: getFirstExistingKey(sampleRow, [
-      'fecha','fecha_venta','dia','día',
+      // Fecha de la transacción
+      "fecha",
+      "fecha_venta",
+      "dia",
+      "día",
     ]),
     pay: getFirstExistingKey(sampleRow, [
-      'metodo_pago','metodo','pago','forma_de_pago','tipo_pago',
+      // Método/forma de pago
+      "metodo_pago",
+      "metodo",
+      "pago",
+      "forma_de_pago",
+      "tipo_pago",
     ]),
     region: getFirstExistingKey(sampleRow, [
-      'region','región','estado','departamento',
+      // Región/estado/departamento
+      "region",
+      "región",
+      "estado",
+      "departamento",
     ]),
     country: getFirstExistingKey(sampleRow, [
-      'pais','país','country',
+      // País
+      "pais",
+      "país",
+      "country",
     ]),
-    // NUEVO: categoría
     category: getFirstExistingKey(sampleRow, [
-      'categoria','categoría','category','subcategoria','subcategoría',
+      // Categoría/subcategoría del producto
+      "categoria",
+      "categoría",
+      "category",
+      "subcategoria",
+      "subcategoría",
     ]),
   };
 
-  // Requeridos mínimos
-  for (const required of ['product', 'qty', 'date']) {
-    if (!COLS[required]) throw new Error(`Falta columna requerida en el CSV: ${required}`);
+  // Valida presencia de mínimos requeridos para operar (producto, cantidad y fecha)
+  for (const required of ["product", "qty", "date"]) {
+    if (!COLS[required])
+      throw new Error(`Falta columna requerida en el CSV: ${required}`);
   }
+
+  // Exige revenue o, en su defecto, unit para derivar revenue = unit * qty
   if (!COLS.revenue && !COLS.unit) {
-    throw new Error('No hay columna de ingresos ni precio_unitario para derivarlo.');
+    throw new Error(
+      "No hay columna de ingresos ni precio_unitario para derivarlo."
+    );
   }
-  return COLS;
+
+  return COLS; // Devuelve mapeo de columnas detectadas
 }

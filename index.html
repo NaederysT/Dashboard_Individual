@@ -5,34 +5,38 @@
     <title>Dashboard de Ventas — Marketing</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Chart.js -->
+    <!-- Carga Chart.js para renderizar gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Estilos -->
+    <!-- Hoja de estilos principal (tema, layout y tarjetas) -->
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body>
+    <!-- Encabezado con título, subtítulo y controles globales -->
     <header>
       <h1>Dashboard de Ventas</h1>
       <div class="sub">
         Análisis de productos, ventas, pagos y distribución geográfica
       </div>
 
+      <!-- Barra de controles: carga de CSV, tema y ayuda -->
       <div class="controls">
+        <!-- Botón: carga el CSV por defecto desde /data -->
         <button id="btnLoadDefault">
           Cargar CSV por defecto (data/datos_taller_software.csv)
         </button>
+        <!-- Separador visual entre acciones -->
         <span class="hint">o</span>
+        <!-- Input: permite cargar un CSV local desde el equipo -->
         <input type="file" id="fileInput" accept=".csv" />
-        <span class="hint">Usa Live Server o el botón “Cargar CSV”.</span>
 
-        <!-- Toggle tema -->
+        <!-- Botón: alterna modo claro/oscuro (actualiza tema y charts) -->
         <button id="themeToggle" class="theme-toggle" style="margin-left: auto">
           <span id="themeIcon">🌙</span>
           <span id="themeLabel">Oscuro</span>
         </button>
 
-        <!-- Toggle ayuda de filtros (sin “X” en la caja) -->
+        <!-- Botón: muestra/oculta el recuadro de ayuda de filtros -->
         <button
           id="showFiltersHelp"
           class="theme-toggle"
@@ -45,8 +49,9 @@
       </div>
     </header>
 
+    <!-- Contenedor principal de tarjetas, gráficos y tablas -->
     <main class="wrap">
-      <!-- KPIs (3 columnas) -->
+      <!-- KPIs: tarjetas con métricas globales (revenue, unidades, ventas) -->
       <section class="kpis">
         <div class="card kpi">
           <div class="chart-title">Monto TOTAL</div>
@@ -65,7 +70,7 @@
         </div>
       </section>
 
-      <!-- ========== RECUADRO INFORMATIVO DE FILTROS (sin botón X) ========== -->
+      <!-- Recuadro informativo: tips de uso de filtros (controlado por botón) -->
       <section class="card info-card" id="infoFilters">
         <div class="info-icon" aria-hidden="true">✨</div>
         <div class="info-content">
@@ -90,15 +95,15 @@
           </ul>
         </div>
       </section>
-      <!-- ===================================================== -->
 
-      <!-- Gráficos -->
+      <!-- Grilla principal de tarjetas de gráficos con sus filtros -->
       <section class="grid">
-        <!-- Top 5 productos por cantidad -->
+        <!-- Card: Top 5 productos por cantidad (con filtros de categoría y fecha) -->
         <div class="card chart-card">
           <div class="chart-title">
             <span>Top 5 productos por cantidad</span>
           </div>
+          <!-- Form: filtros locales del gráfico (category, from, to) -->
           <form class="chart-filters" id="filtersProductsQty">
             <label>
               Categoría
@@ -114,17 +119,20 @@
               Hasta
               <input type="date" name="to" />
             </label>
+            <!-- Botones: aplica filtros o limpia el formulario -->
             <button type="button" data-action="apply">Aplicar</button>
             <button type="button" data-action="reset">Limpiar</button>
           </form>
+          <!-- Lienzo: destino del gráfico de barras -->
           <div class="chart-body">
             <canvas id="chartProductsQty"></canvas>
           </div>
         </div>
 
-        <!-- Top 5 productos por Ventas -->
+        <!-- Card: Top 5 productos por ventas (con filtros de categoría y fecha) -->
         <div class="card chart-card">
           <div class="chart-title"><span>Top 5 productos por Ventas</span></div>
+          <!-- Form: filtros locales del gráfico (category, from, to) -->
           <form class="chart-filters" id="filtersProductsRevenue">
             <label>
               Categoría
@@ -140,19 +148,22 @@
               Hasta
               <input type="date" name="to" />
             </label>
+            <!-- Botones: aplica filtros o limpia el formulario -->
             <button type="button" data-action="apply">Aplicar</button>
             <button type="button" data-action="reset">Limpiar</button>
           </form>
+          <!-- Lienzo: destino del gráfico de barras -->
           <div class="chart-body">
             <canvas id="chartProductsRevenue"></canvas>
           </div>
         </div>
 
-        <!-- Ventas en el tiempo (100% ancho) -->
+        <!-- Card: ventas en el tiempo con granularidad (mes/trimestre) y filtros -->
         <div class="card chart-card full" style="grid-column: 1 / -1">
           <div class="chart-title">
             <span>Ventas en el tiempo (por mes / trimestre)</span>
           </div>
+          <!-- Form: filtros locales (category, pay, gran, from, to) -->
           <form class="chart-filters" id="filtersTime">
             <label>
               Categoría
@@ -167,7 +178,7 @@
               </select>
             </label>
 
-            <!-- 🔽 NUEVO: Granularidad -->
+            <!-- Selector: define la granularidad temporal del gráfico -->
             <label>
               Granularidad
               <select name="gran">
@@ -184,17 +195,20 @@
               Hasta
               <input type="date" name="to" />
             </label>
+            <!-- Botones: aplica filtros o limpia el formulario -->
             <button type="button" data-action="apply">Aplicar</button>
             <button type="button" data-action="reset">Limpiar</button>
           </form>
+          <!-- Lienzo: destino del gráfico de línea -->
           <div class="chart-body">
             <canvas id="chartTime"></canvas>
           </div>
         </div>
 
-        <!-- Métodos de pago -->
+        <!-- Card: métodos de pago con filtro de categoría y fechas -->
         <div class="card chart-card">
           <div class="chart-title"><span>Métodos de pago más usados</span></div>
+          <!-- Form: filtros locales del gráfico (category, from, to) -->
           <form class="chart-filters" id="filtersPayments">
             <label>
               Categoría
@@ -210,19 +224,22 @@
               Hasta
               <input type="date" name="to" />
             </label>
+            <!-- Botones: aplica filtros o limpia el formulario -->
             <button type="button" data-action="apply">Aplicar</button>
             <button type="button" data-action="reset">Limpiar</button>
           </form>
+          <!-- Lienzo: destino del gráfico de dona -->
           <div class="chart-body">
             <canvas id="chartPayments"></canvas>
           </div>
         </div>
 
-        <!-- Unidades por categoría -->
+        <!-- Card: unidades por categoría (solo rango de fechas) -->
         <div class="card chart-card">
           <div class="chart-title">
             <span>Unidades vendidas por categoría</span>
           </div>
+          <!-- Form: filtros locales del gráfico (from, to) -->
           <form class="chart-filters" id="filtersCategoriesQty">
             <label>
               Desde
@@ -232,19 +249,22 @@
               Hasta
               <input type="date" name="to" />
             </label>
+            <!-- Botones: aplica filtros o limpia el formulario -->
             <button type="button" data-action="apply">Aplicar</button>
             <button type="button" data-action="reset">Limpiar</button>
           </form>
+          <!-- Lienzo: destino del gráfico de barras -->
           <div class="chart-body">
             <canvas id="chartCategoriesQty"></canvas>
           </div>
         </div>
 
-        <!-- Geo -->
+        <!-- Card: distribución geográfica por región o país (con filtros) -->
         <div class="card chart-card" style="grid-column: 1 / -1">
           <div class="chart-title">
             <span>Distribución de ventas por Región / País</span>
           </div>
+          <!-- Form: filtros locales del gráfico (category, from, to) -->
           <form class="chart-filters" id="filtersGeo">
             <label>
               Categoría
@@ -260,21 +280,24 @@
               Hasta
               <input type="date" name="to" />
             </label>
+            <!-- Botones: aplica filtros o limpia el formulario -->
             <button type="button" data-action="apply">Aplicar</button>
             <button type="button" data-action="reset">Limpiar</button>
           </form>
+          <!-- Lienzo: destino del gráfico de barras -->
           <div class="chart-body">
             <canvas id="chartGeo"></canvas>
           </div>
         </div>
       </section>
 
-      <!-- Tablas resumen (globales, sin filtros) -->
+      <!-- Sección de tablas resumen globales (no dependen de filtros de gráficos) -->
       <section class="card">
         <div class="chart-title">
-          <span>Resumen tabular — Top productos (cantidad y ventas)</span>
+          <span>Resumen — Top productos (cantidad y ventas)</span>
         </div>
         <div class="grid">
+          <!-- Tabla: top por cantidad (global) -->
           <div>
             <table class="table" id="tableTopQty">
               <thead>
@@ -286,6 +309,7 @@
               <tbody></tbody>
             </table>
           </div>
+          <!-- Tabla: top por ventas (global) -->
           <div>
             <table class="table" id="tableTopRevenue">
               <thead>
@@ -301,12 +325,10 @@
       </section>
     </main>
 
-    <footer>
-      Construido con HTML, CSS y JS puro + Chart.js. Métricas calculadas con
-      funciones utilitarias.
-    </footer>
+    <!-- Pie de página informativo del stack usado -->
+    <footer>Ramo: Ingeniería de Software - Dashboard</footer>
 
-    <!-- JS principal y toggle de tema -->
+    <!-- Entradas JS: app (datos+gráficos), theme-toggle (tema) e info-tip (ayuda) -->
     <script type="module" src="js/app.js"></script>
     <script type="module" src="js/theme-toggle.js"></script>
     <script type="module" src="js/ui/info-tip.js"></script>
